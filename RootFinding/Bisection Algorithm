@@ -1,0 +1,58 @@
+% Bisection Algorithm is an algorithm used to approximate the root of a given
+% continuous function. First we define an interval (a,b) where f(a)<0 and
+% f(b)>0. Since the function is continuous, we know there has to be a root
+% between a and b. For our first root approximation, we define a new value
+% c for (a+b)/2.
+% If f(c)*f(a)>0 --> c is the new lower bound ( a=c)
+% If f(c)*f(a)<0 --> C is the new upper bound ( b=c)
+% If f(c)*f(a)=0 --> C is the new root
+
+% We continue with this iteration until our relative error |C2-C1|/C2 is
+% smaller than our acceptable error rate.
+
+
+%clearing console and command window
+clear;
+clc;
+
+%Defining the function
+syms x;
+f(x)=log(x^2)+1;
+
+%defining upper and lower bound
+a=0;
+b=2;
+%defining error rate
+target_error = 10^(-5);
+current_error = 100; %just an arbitrary value to define current error
+c1=(a+b)/2; %first approximation
+n=0; %iteration count
+%perform algorithm until error condition is satisfied
+fprintf("n \t\ta\t\tb \t\t\t\tc \t\t\t|b-c|\t\tf(c)\n");
+while (current_error>target_error)
+    c0=c1; %to save the previous value of c
+    c1=(a+b)/2; 
+    
+    if f(c1)*f(b)>0
+        b=c1;%c is the new upper bound
+    elseif f(c1)*f(b)<0
+        a=c1; %c is the new lower bound
+    else
+        break; %root is found
+    end
+    
+    if n>0 %this basic if block is actually there to stop this statement from 
+        %running at the first iteration, added while debugging :)
+        current_error = abs(c1-c0);
+    end
+    n=n+1; %increment the iteration count
+    
+    fprintf("%d   %.5f   %.5f   %.15f   %.5f    %.5f\n",n,a,b,c1,abs(b-c1),f(c1));
+    
+    
+    
+end
+fprintf("\n\n\n");
+disp("Best Approximation :");
+fprintf("%.6f\n",c1);
+   
