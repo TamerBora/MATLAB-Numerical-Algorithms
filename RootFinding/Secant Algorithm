@@ -1,0 +1,37 @@
+% Secant algorithm is an open-method root finding algorithm derived from
+% Newton-Raphson Algorithm for cases where calculating derivative of our
+% function might be an inconvenience. In some cases Secant algorithm might
+% demand more iterations than Newton-Raphson Algorithm but it has an
+% advantage such that it does not require the knowledge of the derivative
+% of the function f(x). It can be faster than Newton-Raphson because it
+% only evaluates one function per iteration.
+% The mathematical model of Secant Method is :
+% xi+1= xi - f(xi) * (xi-xi-1)/(f(xi)*f(xi-1))
+
+clear;
+clc;
+digits(10);
+syms x
+f(x) = x^4 - x - 1; %defining function
+
+%defining error rates
+desired_error =10 ^-6;
+current_error = 100;
+
+x0 = 0.5; %first approx.
+x1 = 2 ; %second approx
+n=0; %defining iteration count
+
+fprintf("n \t\t\txn\t\t\t\tf(xn)\t\t|xn-xn-1|\n");
+while (desired_error<current_error)
+    x2 = vpa(x1 - (f(x1) * (x1 - x0)) / ( f(x1) - f(x0) )); % applying secant algorithm
+    current_error = vpa(abs(x2 - x1)) ; % calculating error rate 
+    n=n+1; %increment iteration count
+    fprintf("%d \t %.10f \t %.10f \t %.10f\n",n,x2,f(x2),abs(x2-x1)); % printing the table
+    x0 = x1; 
+    x1= x2; % adjustments on the variables
+end
+
+fprintf("\nBest Approximation : ");
+fprintf(" %.7f",x2);
+    
