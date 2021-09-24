@@ -1,0 +1,39 @@
+% Newton-Raphson Algorithm is an open method used in the process 
+% of root finding operations. The main idea is that for an initial
+% approximation of x1 , we draw the tangent line to our function at
+% x1. The point where our tangent line crosses the x-axis becomes
+% our next approximation. We repeat this process until our error
+% rate condition is satisfied.
+% The mathematical model of Newton-Raphson Algorithm is as follows:
+% xi+1 = xi - f(xi)/f'(xi+1)
+% In order to get this equation, we express the slope of the
+% tangent line in two different ways : as the tangent of the angle
+% between the line and the axis and as the derivative of the function
+% at that point.
+
+clear;
+clc;
+digits(10);
+%defining the function
+syms x
+f(x)=exp(-x^2) - 0.2 ;
+
+x0= -1; % After inspecting the graph ( see the last page ) I decided to pick
+% -1 as the initial approximation.
+
+desired_error = 10^-7;
+current_error=100; %arbitrary value just to define target error
+n=0; %iteration count
+f_prime = diff(f); % derivative function of f
+fprintf("n \t\t\txn\t\t\t\tf(xn)\t\t\t|xn-xn-1|\n");
+while(current_error>desired_error)
+    n=n+1;
+    x1 = vpa(x0 - f(x0)/f_prime(x0)); %applying newton algorithm
+    current_error = vpa(abs(x1-x0 )); %calculating error
+    fprintf("%d \t %.10f \t %.10f \t %.10f\n",n,x1,f(x1),abs(x1-x0)); %printing table
+    x0=x1; %variable reassingment
+    
+end
+
+fprintf("\nBest Approximation : \n");
+fprintf("%.8f\n",x1);
