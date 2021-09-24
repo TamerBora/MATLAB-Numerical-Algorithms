@@ -1,0 +1,36 @@
+% Fixed point iteration is a root finding algorithm where we create a
+% simple formula for the root using fixed points such that:
+% In order to find f(x)=0, we use iteration processes on the statement :
+% xi+1 = g(xi) 
+% The convergence criteria of fixed-point iteration method is that the
+% derivative of the function g(x) must satisfy the following criteria:
+% |g'(x)'| < 1 
+% It should also be continuous and differentiable in the predicted
+% interval.
+
+clc;
+clear;
+digits(10);
+
+syms x
+f(x) = 4*x + 1 - exp(x); %initial function
+g(x) = log(4*x+1); %arranged function for algorithm
+
+current_error=100;
+target_error = 10^-6;% defining error 
+
+n =0; %starting iteration count 
+
+x0=1; %initial guess
+fprintf("n \t\t\txn\t\t\t|xn-xn-1|\n");
+while(current_error>= target_error)
+    n=n+1; %increment iteration
+    x1=vpa(g(x0)); %applying fixed point
+    current_error=vpa(abs(x1-x0)); %calculating error rate
+    fprintf("%d \t %.10f \t %.10f\n",n,x1,abs(x1-x0)); % printing the table
+    x0=x1; %reassignment
+    
+end
+
+disp("Best approximation :");
+fprintf("%.7f\n",x1);
