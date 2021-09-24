@@ -1,0 +1,107 @@
+clear;
+clc;
+close all;
+
+%defining e number
+e=vpa(exp(1));
+
+syms x;
+
+%defining the functions and the intervals
+f1(x)=4*x^3 + 5*x^2 + x -2;
+a1=1;
+b1=5;
+
+f2(x) = (x^2)/(2*x^3 + 3) ;
+a2=2;
+b2=20;
+
+f3(x) = 2*x^2 * (e^-x);
+a3=0;
+b3=4;
+
+% calculating the integrals using int function for analytical solutions, 
+%see the previous page.
+solution_f1 = int(f1,1,5);
+solution_f2 = int(f2,2,20);
+solution_f3 = int(f3,0,4); 
+
+%digit count for vpa function
+digits(6);
+
+%column name for final table
+col= ["N";"Riemann approx.";"Riemann error";"Trapezoidal approx";"Trapezoidal error";...
+    "Simpson approx.";"Simpson error"];
+
+%initializing table row
+row=1;
+
+for N = [4,10,50,100,950]
+    %using function values for approximation ( left riemann using
+    %rectangles)
+    %defining step size
+    step_size1 = (b1-a1)/N;
+    %applying left riemann sum
+    riemann_sum=0;
+    i=a1;
+    while i<b1
+        riemann_sum=riemann_sum + f1(i)*step_size1;
+        i=i+step_size1;
+    end
+    %calculating absolute value of real error
+    riemann_error= abs(solution_f1 - riemann_sum);
+    
+    %trapezoidal approximation for N trapezoids
+    i=a1+step_size1;
+    sigma=0;
+    while i<b1
+        sigma= sigma + 2*f1(i);
+        i=i+step_size1;
+    end
+    trapezoidal_approx = (step_size1/2)*(f1(a1)+sigma+f1(b1));
+    
+    trapezoidal_error = abs(solution_f1 - trapezoidal_approx);
+    
+    % 1/3 rule of simpson approximation 
+    
+    
+    %applying simpson rule algorithmically
+    sigma_odd=0;
+    k=a1+step_size1;
+    while k<b1
+        sigma_odd= sigma_odd + 4*f1(k);
+        k=k+ 2* step_size1;
+    end
+    sigma_even = 0;
+    j= a1+ 2 *step_size1;
+    while j<b1
+        sigma_even= sigma_even + 2*f1(j);
+        j=j+ 2* step_size1;
+    end
+    simpson_approximation = (step_size1 / 3 ) * (f1(a1)+sigma_odd ...
+        + sigma_even + f1(b1));
+    
+    %calculating simpson error
+    simpson_error = vpa(abs(solution_f1 - simpson_approximation));
+    
+    % listing the current results
+    M = [N,riemann_sum,riemann_error,trapezoidal_approx,trapezoidal_error,...
+        simpson_approximation,simpson_error];
+   
+    %saving the results to data variable
+    for k = 1:7
+        data(row,k)=M(k);
+    end
+    %incrementing row by 1
+    row=row+1;
+    
+end
+
+
+% sym --> double conversion for table format
+final_data=double(data);
+%creating the final output table !
+uitable('ColumnName',col,'Data',final_data);
+
+
+        
